@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>تخصيص المقر — متجر جست لايف</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #FFD700;
+    --dark-gold: #B8860B;
+    --bg: #0a0a0f;
+    --card: #12121a;
+    --border: #2a2a3a;
+    --text: #e8e8f0;
+    --sub: #8888aa;
+    --input-bg: #0e0e18;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    position: relative;
+    background: linear-gradient(135deg, #0d0d18 0%, #1a1025 50%, #0d0d18 100%);
+    padding: 40px 24px 32px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .header-glow {
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,215,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-content { position: relative; }
+  .logo { font-size: 52px; margin-bottom: 8px; }
+  .title {
+    font-size: 32px; font-weight: 800;
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(255,215,0,0.4);
+    letter-spacing: 2px;
+  }
+  .subtitle { margin-top: 8px; font-size: 15px; color: var(--sub); letter-spacing: 1px; }
+
+  /* ── BODY ── */
+  .body { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* ── SECTION ── */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .section-title {
+    display: flex; align-items: center; gap: 8px;
+    padding: 18px 22px 16px;
+    font-size: 17px; font-weight: 700;
+    color: var(--gold);
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,215,0,0.03);
+  }
+  .section-body { padding: 20px 22px; }
+
+  /* ── FIELDS ── */
+  .row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .field { flex: 1; min-width: 200px; }
+  .field + .field { margin-top: 0; }
+  .field-mt { margin-top: 14px; }
+  label { display: block; font-size: 13px; color: var(--sub); margin-bottom: 7px; font-weight: 600; }
+  .req { color: #ff6b6b; }
+  input[type="text"], textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus, textarea:focus { border-color: var(--gold); }
+  textarea { resize: vertical; min-height: 90px; }
+
+  /* ── HQ TYPE ── */
+  .hq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .hq-btn {
+    background: var(--input-bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    text-align: right;
+    transition: all 0.2s;
+    display: flex; flex-direction: column; gap: 6px;
+    color: var(--text);
+  }
+  .hq-btn:hover { border-color: rgba(255,215,0,0.4); }
+  .hq-btn.active {
+    border-color: var(--gold);
+    background: rgba(255,215,0,0.08);
+    box-shadow: 0 0 16px rgba(255,215,0,0.2);
+  }
+  .hq-label { font-size: 15px; font-weight: 600; }
+  .hq-price { font-size: 13px; color: var(--gold); font-weight: 700; }
+
+  /* ── CHECK GRID ── */
+  .check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+  .check-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: rgba(255,215,0,0.35); }
+  .check-item.active {
+    border-color: var(--gold);
+    background: rgba(255,215,0,0.07);
+  }
+  .checkbox {
+    width: 20px; height: 20px; flex-shrink: 0;
+    border-radius: 5px;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 900; color: #000;
+    transition: all 0.15s;
+  }
+  .check-item.active .checkbox {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+  .check-label { flex: 1; font-size: 13px; color: var(--text); }
+  .check-pct { font-size: 12px; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+
+  /* ── PRICE CARD ── */
+  .price-card {
+    background: linear-gradient(135deg, #12121a, #1a1228);
+    border: 1px solid rgba(255,215,0,0.27);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+  }
+  .price-card h3 { font-size: 18px; color: var(--gold); font-weight: 800; margin-bottom: 16px; }
+  .price-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .price-row { display: flex; justify-content: space-between; align-items: center; }
+  .price-row span { font-size: 14px; color: var(--text); }
+  .price-row.small span { font-size: 12px; color: var(--sub); }
+  .price-row.accent span { color: var(--gold); font-weight: 700; }
+  .price-final {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 16px;
+    background: rgba(255,215,0,0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(255,215,0,0.4);
+    margin-top: 4px;
+  }
+  .price-final span:first-child { font-size: 15px; color: var(--text); font-weight: 600; }
+  .price-final-num { font-size: 24px; color: var(--gold); font-weight: 900; }
+
+  /* ── ERROR ── */
+  .error-box {
+    background: #2a0e0e;
+    border: 1px solid #ff4444;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    color: #ff8888;
+    font-size: 14px;
+    display: none;
+  }
+  .error-box.show { display: block; }
+
+  /* ── SUBMIT ── */
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--gold), var(--dark-gold));
+    color: #000;
+    font-size: 17px;
+    font-weight: 800;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 20px rgba(255,215,0,0.35);
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .submit-btn:hover { box-shadow: 0 6px 28px rgba(255,215,0,0.5); transform: translateY(-1px); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .notice { text-align: center; color: var(--sub); font-size: 13px; margin-top: 14px; }
+
+  /* ── SUCCESS ── */
+  #success-screen {
+    display: none;
+    max-width: 500px;
+    margin: 80px auto;
+    background: var(--card);
+    border: 1px solid rgba(255,215,0,0.27);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+  }
+  #success-screen .success-icon { font-size: 64px; margin-bottom: 16px; }
+  #success-screen h2 { font-size: 24px; color: var(--gold); font-weight: 800; margin-bottom: 10px; }
+  #success-screen p { color: var(--sub); font-size: 14px; margin-bottom: 24px; }
+  .summary-box {
+    background: var(--input-bg);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    text-align: right;
+  }
+  .summary-row {
+    display: flex; justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-label { color: var(--sub); font-size: 13px; }
+  .summary-value { color: var(--text); font-size: 13px; font-weight: 600; }
+  .summary-highlight { color: var(--gold); font-size: 16px; font-weight: 900; }
+  .reset-btn {
+    background: linear-gradient(135deg, var(--gold), var(--dark-gold));
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 32px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .reset-btn:hover { opacity: 0.9; }
+
+  @media (max-width: 600px) {
+    .title { font-size: 24px; }
+    .row { flex-direction: column; }
+    .check-grid { grid-template-columns: 1fr; }
+    .hq-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-glow"></div>
+  <div class="header-content">
+    <div class="logo">🏰</div>
+    <h1 class="title">تخصيص المقر</h1>
+    <p class="subtitle">متجر جست لايف — Just Life Store</p>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="body" id="form-screen">
+
+  <!-- Player Info -->
+  <div class="section">
+    <div class="section-title">📋 معلومات الطلب</div>
+    <div class="section-body">
+      <div class="row">
+        <div class="field">
+          <label>👤 اسم اللاعب <span class="req">*</span></label>
+          <input type="text" id="playerName" placeholder="اكتب اسمك هنا..." />
+        </div>
+        <div class="field">
+          <label>🏪 اسم المنظمة / العصابة / الشركة <span class="req">*</span></label>
+          <input type="text" id="orgName" placeholder="اكتب اسم المنظمة..." />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HQ Type -->
+  <div class="section">
+    <div class="section-title">🏰 نوع المقر المطلوب <span class="req" style="font-size:13px"> *</span></div>
+    <div class="section-body">
+      <div class="hq-grid" id="hq-grid"></div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="section">
+    <div class="section-title">⭐ المميزات الخاصة</div>
+    <div class="section-body">
+      <div class="check-grid" id="features-grid"></div>
+    </div>
+  </div>
+
+  <!-- Addons -->
+  <div class="section">
+    <div class="section-title">🔧 الإضافات المطلوبة</div>
+    <div class="section-body">
+      <div class="check-grid" id="addons-grid"></div>
+    </div>
+  </div>
+
+  <!-- Details -->
+  <div class="section">
+    <div class="section-title">📝 تفاصيل إضافية</div>
+    <div class="section-body">
+      <div class="field">
+        <label>🎨 الألوان المطلوبة</label>
+        <input type="text" id="colors" placeholder="مثال: ذهبي وأسود..." />
+      </div>
+      <div class="field field-mt">
+        <label>📍 الغرف أو الأماكن الخاصة المطلوبة</label>
+        <input type="text" id="rooms" placeholder="مثال: غرفة VIP، مستودع سري..." />
+      </div>
+      <div class="field field-mt">
+        <label>📝 وصف كامل للمقر</label>
+        <textarea id="description" placeholder="اكتب وصفاً تفصيلياً للمقر المطلوب..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Price -->
+  <div class="price-card">
+    <h3>💰 ملخص السعر</h3>
+    <div class="price-rows" id="price-rows"></div>
+    <div class="price-final">
+      <span>السعر النهائي</span>
+      <span class="price-final-num" id="final-price">0$</span>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="error-box" id="error-box"></div>
+
+  <!-- Submit -->
+  <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">📤 إرسال الطلب</button>
+  <p class="notice">⏳ سيتم مراجعة الطلب من قبل إدارة متجر Just Life والتواصل معك عند الانتهاء.</p>
+</div>
+
+<!-- SUCCESS -->
+<div id="success-screen" class="body">
+  <div class="success-icon">✅</div>
+  <h2>تم إرسال الطلب بنجاح!</h2>
+  <p>سيتم مراجعة طلبك من قبل إدارة متجر Just Life والتواصل معك قريباً.</p>
+  <div class="summary-box" id="summary-box"></div>
+  <button class="reset-btn" onclick="handleReset()">إرسال طلب جديد</button>
+</div>
+
+<script>
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1515901068439982081/AC3iQ6TIXUlKC8MnLHkxfjO00pa-vRveXg6o--XhBPsONRIqDX5kBlVsNFGNwgmcT038";
+
+const HQ_TYPES = [
+  { id: "bunker",     label: "🏰 بنكر سري",     basePrice: 300000 },
+  { id: "normal",     label: "🏢 مقر عادي",      basePrice: 200000 },
+  { id: "marine",     label: "🌊 مقر بحري",      basePrice: 350000 },
+  { id: "industrial", label: "🏭 مقر صناعي",     basePrice: 250000 },
+  { id: "security",   label: "🛡️ مقر أمني",      basePrice: 280000 },
+  { id: "custom",     label: "✨ تصميم خاص",     basePrice: 400000 },
+];
+
+const FEATURES = [
+  { id: "auto_doors",          label: "نظام أبواب أوتوماتيكية",        pct: 5  },
+  { id: "pro_lighting",        label: "نظام إضاءة احترافي",            pct: 5  },
+  { id: "luxury_decor",        label: "ديكور فاخر",                    pct: 10 },
+  { id: "luxury_furniture",    label: "أثاث فاخر",                     pct: 10 },
+  { id: "fingerprint",         label: "نظام بصمة للدخول",              pct: 15 },
+  { id: "adv_protection",      label: "نظام حماية متطور",              pct: 15 },
+  { id: "smart_cameras",       label: "كاميرات مراقبة ذكية",           pct: 10 },
+  { id: "e_gate",              label: "بوابة رئيسية إلكترونية",        pct: 10 },
+  { id: "bulletproof",         label: "نوافذ مضادة للرصاص",            pct: 15 },
+  { id: "generator",           label: "مولد كهربائي احتياطي",          pct: 5  },
+  { id: "network",             label: "شبكة إنترنت واتصالات",          pct: 5  },
+  { id: "org_signs",           label: "لوحات تعريف باسم المنظمة",      pct: 5  },
+  { id: "org_logos",           label: "شعارات المنظمة داخل المقر",     pct: 5  },
+  { id: "vip_parking",         label: "مواقف VIP",                     pct: 10 },
+  { id: "gardens",             label: "حدائق خارجية",                  pct: 10 },
+  { id: "pool",                label: "مسبح",                          pct: 15 },
+  { id: "fountain",            label: "نافورة",                        pct: 10 },
+  { id: "helipad",             label: "مهبط هليكوبتر",                 pct: 20 },
+  { id: "vip_meeting",         label: "غرفة اجتماعات VIP",             pct: 10 },
+  { id: "full_custom_interior",label: "تصميم داخلي مخصص بالكامل",     pct: 20 },
+];
+
+const ADDONS = [
+  { id: "garage",           label: "كراج سيارات",              pct: 10 },
+  { id: "big_parking",      label: "موقف سيارات كبير",         pct: 5  },
+  { id: "meeting_room",     label: "غرفة اجتماعات",            pct: 5  },
+  { id: "weapons_room",     label: "غرفة أسلحة",               pct: 15 },
+  { id: "vault_room",       label: "غرفة خزائن",               pct: 10 },
+  { id: "control_room",     label: "غرفة تحكم ومراقبة",        pct: 10 },
+  { id: "cctv",             label: "كاميرات مراقبة",           pct: 5  },
+  { id: "prison",           label: "سجن داخلي",                pct: 15 },
+  { id: "aircraft_pad",     label: "مهبط طائرات",              pct: 20 },
+  { id: "boat_port",        label: "ميناء قوارب",              pct: 15 },
+  { id: "elevator",         label: "مصعد بين الطوابق",         pct: 5  },
+  { id: "tunnels",          label: "أنفاق سرية",               pct: 20 },
+  { id: "storage",          label: "مخزن بضائع",               pct: 10 },
+  { id: "training_hall",    label: "قاعة تدريب",               pct: 10 },
+  { id: "car_show",         label: "ساحة استعراض سيارات",      pct: 10 },
+  { id: "adv_gates",        label: "بوابات أمنية متطورة",      pct: 10 },
+  { id: "secret_doors",     label: "أبواب سرية",               pct: 10 },
+  { id: "special_protection",label:"نظام حماية خاص",           pct: 15 },
+  { id: "boss_room",        label: "غرفة قائد المنظمة",        pct: 10 },
+  { id: "member_housing",   label: "سكن للأعضاء",              pct: 15 },
+  { id: "equipment_depot",  label: "مستودع معدات",             pct: 10 },
+  { id: "luxury_interior",  label: "تصميم داخلي فاخر",         pct: 20 },
+  { id: "luxury_exterior",  label: "تصميم خارجي فاخر",         pct: 15 },
+  { id: "floor_1",          label: "طابق إضافي",               pct: 20 },
+  { id: "floor_2",          label: "طابقين إضافيين",           pct: 40 },
+  { id: "floor_3",          label: "ثلاثة طوابق إضافية",       pct: 60 },
+];
+
+// State
+let selectedHQ = null;
+let checkedFeatures = {};
+let checkedAddons = {};
+
+function fmt(n) { return Number(n).toLocaleString("en-US") + "$"; }
+
+// ── BUILD HQ BUTTONS ──
+function buildHQGrid() {
+  const grid = document.getElementById("hq-grid");
+  HQ_TYPES.forEach(h => {
+    const btn = document.createElement("button");
+    btn.className = "hq-btn";
+    btn.id = "hq-" + h.id;
+    btn.innerHTML = `<span class="hq-label">${h.label}</span><span class="hq-price">${fmt(h.basePrice)}</span>`;
+    btn.onclick = () => selectHQ(h);
+    grid.appendChild(btn);
+  });
+}
+
+function selectHQ(h) {
+  selectedHQ = h;
+  document.querySelectorAll(".hq-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("hq-" + h.id).classList.add("active");
+  updatePrice();
+}
+
+// ── BUILD CHECK GRIDS ──
+function buildCheckGrid(containerId, items, stateObj) {
+  const grid = document.getElementById(containerId);
+  items.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "check-item";
+    el.id = "ci-" + item.id;
+    el.innerHTML = `
+      <div class="checkbox" id="cb-${item.id}"></div>
+      <span class="check-label">${item.label}</span>
+      <span class="check-pct">+${item.pct}%</span>
+    `;
+    el.onclick = () => {
+      stateObj[item.id] = !stateObj[item.id];
+      el.classList.toggle("active", !!stateObj[item.id]);
+      document.getElementById("cb-" + item.id).textContent = stateObj[item.id] ? "✓" : "";
+      updatePrice();
+    };
+    grid.appendChild(el);
+  });
+}
+
+// ── PRICE ──
+function calcTotals() {
+  const base = selectedHQ ? selectedHQ.basePrice : 0;
+  const fPct = FEATURES.filter(f => checkedFeatures[f.id]).reduce((s, f) => s + f.pct, 0);
+  const aPct = ADDONS.filter(a => checkedAddons[a.id]).reduce((s, a) => s + a.pct, 0);
+  const totalPct = fPct + aPct;
+  const final = Math.round(base * (1 + totalPct / 100));
+  return { base, totalPct, final };
+}
+
+function updatePrice() {
+  const { base, totalPct, final } = calcTotals();
+  const rows = document.getElementById("price-rows");
+  rows.innerHTML = "";
+
+  addPriceRow(rows, "السعر الأساسي", fmt(base), "");
+
+  FEATURES.filter(f => checkedFeatures[f.id]).forEach(f => {
+    addPriceRow(rows, f.label, `+${f.pct}%`, "small");
+  });
+  ADDONS.filter(a => checkedAddons[a.id]).forEach(a => {
+    addPriceRow(rows, a.label, `+${a.pct}%`, "small");
+  });
+
+  if (totalPct > 0) addPriceRow(rows, "إجمالي الزيادة", `${totalPct}%`, "accent");
+
+  document.getElementById("final-price").textContent = fmt(final);
+}
+
+function addPriceRow(container, label, value, cls) {
+  const row = document.createElement("div");
+  row.className = "price-row" + (cls ? " " + cls : "");
+  row.innerHTML = `<span>${label}</span><span>${value}</span>`;
+  container.appendChild(row);
+}
+
+// ── DISCORD PAYLOAD ──
+function buildPayload() {
+  const playerName = document.getElementById("playerName").value.trim();
+  const orgName    = document.getElementById("orgName").value.trim();
+  const colors     = document.getElementById("colors").value.trim();
+  const rooms      = document.getElementById("rooms").value.trim();
+  const desc       = document.getElementById("description").value.trim();
+  const { base, totalPct, final } = calcTotals();
+
+  const now = new Date().toLocaleString("ar-SA", { timeZone: "Asia/Riyadh", dateStyle: "full", timeStyle: "short" });
+
+  const fList = FEATURES.filter(f => checkedFeatures[f.id]);
+  const aList = ADDONS.filter(a => checkedAddons[a.id]);
+
+  const featureLines = fList.length ? fList.map(f => `• ${f.label} (+${f.pct}%)`).join("\n") : "لا يوجد";
+  const addonLines   = aList.length ? aList.map(a => `• ${a.label} (+${a.pct}%)`).join("\n") : "لا يوجد";
+
+  return {
+    username: "متجر جست لايف - طلبات المقرات",
+    embeds: [{
+      title: "🏰 طلب تخصيص مقر جديد",
+      color: 0xFFD700,
+      fields: [
+        { name: "👤 اسم اللاعب",           value: playerName || "—", inline: true },
+        { name: "🏪 اسم المنظمة",           value: orgName    || "—", inline: true },
+        { name: "🏰 نوع المقر",             value: selectedHQ?.label || "—", inline: true },
+        { name: "⭐ المميزات الخاصة",       value: featureLines, inline: false },
+        { name: "🔧 الإضافات المطلوبة",     value: addonLines,  inline: false },
+        { name: "🎨 الألوان المطلوبة",      value: colors || "—", inline: false },
+        { name: "📍 الغرف / الأماكن الخاصة",value: rooms  || "—", inline: false },
+        { name: "📝 وصف المقر",             value: desc   || "—", inline: false },
+        {
+          name: "💰 تفاصيل السعر",
+          value: `السعر الأساسي: **${fmt(base)}**\nنسبة الزيادة: **${totalPct}%**\nالسعر النهائي: **${fmt(final)}**`,
+          inline: false
+        },
+        { name: "📅 تاريخ الطلب", value: now, inline: false },
+      ],
+      footer: { text: "Just Life Store — نظام طلبات المقرات" },
+    }]
+  };
+}
+
+// ── SUBMIT ──
+async function handleSubmit() {
+  const playerName = document.getElementById("playerName").value.trim();
+  const orgName    = document.getElementById("orgName").value.trim();
+  const errBox     = document.getElementById("error-box");
+  const btn        = document.getElementById("submit-btn");
+
+  if (!playerName || !orgName || !selectedHQ) {
+    errBox.textContent = "⚠️ يرجى تعبئة اسم اللاعب، اسم المنظمة، واختيار نوع المقر.";
+    errBox.classList.add("show");
+    return;
+  }
+  errBox.classList.remove("show");
+
+  btn.disabled = true;
+  btn.textContent = "⏳ جاري الإرسال...";
+
+  try {
+    const res = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(buildPayload()),
+    });
+
+    if (res.ok || res.status === 204) {
+      showSuccess();
+    } else {
+      throw new Error("HTTP " + res.status);
+    }
+  } catch (e) {
+    errBox.textContent = "⚠️ فشل إرسال الطلب. تحقق من الاتصال وحاول مجدداً.";
+    errBox.classList.add("show");
+    btn.disabled = false;
+    btn.textContent = "📤 إرسال الطلب";
+  }
+}
+
+function showSuccess() {
+  const { final } = calcTotals();
+  const playerName = document.getElementById("playerName").value.trim();
+  const orgName    = document.getElementById("orgName").value.trim();
+
+  const box = document.getElementById("summary-box");
+  box.innerHTML = `
+    <div class="summary-row"><span class="summary-label">👤 اللاعب</span><span class="summary-value">${playerName}</span></div>
+    <div class="summary-row"><span class="summary-label">🏪 المنظمة</span><span class="summary-value">${orgName}</span></div>
+    <div class="summary-row"><span class="summary-label">🏰 المقر</span><span class="summary-value">${selectedHQ.label}</span></div>
+    <div class="summary-row"><span class="summary-label">💰 السعر النهائي</span><span class="summary-highlight">${fmt(final)}</span></div>
+  `;
+
+  document.getElementById("form-screen").style.display = "none";
+  document.getElementById("success-screen").style.display = "block";
+}
+
+function handleReset() {
+  selectedHQ = null; checkedFeatures = {}; checkedAddons = {};
+  document.getElementById("playerName").value = "";
+  document.getElementById("orgName").value    = "";
+  document.getElementById("colors").value     = "";
+  document.getElementById("rooms").value      = "";
+  document.getElementById("description").value = "";
+  document.querySelectorAll(".hq-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".check-item").forEach(el => {
+    el.classList.remove("active");
+    el.querySelector(".checkbox").textContent = "";
+  });
+  document.getElementById("error-box").classList.remove("show");
+  document.getElementById("submit-btn").disabled = false;
+  document.getElementById("submit-btn").textContent = "📤 إرسال الطلب";
+  updatePrice();
+  document.getElementById("form-screen").style.display = "block";
+  document.getElementById("success-screen").style.display = "none";
+  window.scrollTo(0, 0);
+}
+
+// ── INIT ──
+buildHQGrid();
+buildCheckGrid("features-grid", FEATURES, checkedFeatures);
+buildCheckGrid("addons-grid",   ADDONS,   checkedAddons);
+updatePrice();
+</script>
+</body>
+</html>
